@@ -9,7 +9,9 @@ from tiatoolbox.models.engine.semantic_segmentor import SemanticSegmentor
 from tiatoolbox.tools.patchextraction import get_patch_extractor
 from tiatoolbox.wsicore.wsireader import WSIReader
 from tqdm.auto import tqdm
-from tissue_masker_lite.utils.helpers import imagenet_normalise, morpholoy_post_process
+
+from tissue_masker_lite.utils.helpers import (imagenet_normalise,
+                                              morpholoy_post_process)
 
 warnings.filterwarnings("ignore")
 
@@ -71,7 +73,7 @@ def gen_tissue_mask(
     threshold: float = 0.5,
     on_gpu: bool = True,
     return_mask=True,
-    save_mask = True,
+    save_mask=True,
 ) -> np.ndarray | None:
     """
     Generate tissue mask for an WSI

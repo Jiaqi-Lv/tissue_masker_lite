@@ -1,7 +1,8 @@
 import os
-from pprint import pprint
-import numpy as np
+
 import click
+import numpy as np
+
 from tissue_masker_lite.process.process_wsi import gen_tissue_mask
 
 
@@ -47,7 +48,7 @@ def _get_mask(
         threshold=threshold,
         cuda=cuda,
         return_mask=return_mask,
-        save_mask=save_mask
+        save_mask=save_mask,
     )
 
 
@@ -58,7 +59,7 @@ def get_mask(
     threshold: float = 0.5,
     cuda: bool = True,
     return_mask: bool = True,
-    save_mask: bool = True
+    save_mask: bool = True,
 ) -> np.ndarray:
     """
     Generate tissue mask of the input WSI
@@ -74,10 +75,6 @@ def get_mask(
     Returns:
         mask(np.ndarray): returns tissue mask if return_mask is True
     """
-    pprint(f"Input WSI: {wsi_path}")
-    pprint(f"Output mask location: {save_dir}")
-    pprint(f"{cuda}")
-
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
@@ -87,7 +84,7 @@ def get_mask(
         model_weight_path=model_weight,
         threshold=threshold,
         return_mask=return_mask,
-        save_mask=save_mask
+        save_mask=save_mask,
     )
 
 

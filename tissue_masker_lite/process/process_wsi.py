@@ -9,8 +9,7 @@ from tiatoolbox.models.engine.semantic_segmentor import SemanticSegmentor
 from tiatoolbox.tools.patchextraction import get_patch_extractor
 from tiatoolbox.wsicore.wsireader import WSIReader
 from tqdm.auto import tqdm
-
-from utils.helpers import imagenet_normalise, morpholoy_post_process
+from tissue_masker_lite.utils.helpers import imagenet_normalise, morpholoy_post_process
 
 warnings.filterwarnings("ignore")
 
@@ -101,7 +100,6 @@ def gen_tissue_mask(
         model.to("cpu")
 
     reader = WSIReader.open(wsi_path)
-    pprint(reader.info.as_dict())
 
     dimension = reader.slide_dimensions(resolution=1.25, units="power")
 

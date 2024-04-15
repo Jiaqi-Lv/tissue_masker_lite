@@ -1,11 +1,12 @@
-from skimage.morphology import remove_small_holes, remove_small_objects, binary_closing
 import numpy as np
+from skimage.morphology import (binary_closing, remove_small_holes,
+                                remove_small_objects)
 
 
 def morpholoy_post_process(patch: np.ndarray) -> np.ndarray:
     """Performs a sequence of morphogical operations on input image"""
-    patch = remove_small_holes(patch)
-    patch = remove_small_objects(patch)
+    patch = remove_small_holes(patch, area_threshold=128)
+    patch = remove_small_objects(patch, min_size=256)
     patch = binary_closing(patch)
     return patch
 

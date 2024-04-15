@@ -68,9 +68,10 @@ def gen_tissue_mask(
     wsi_path: str,
     save_dir: str,
     model_weight_path: str = "model_weights/model_36.pth",
-    threshold: int = 0.5,
+    threshold: float = 0.5,
     on_gpu: bool = True,
     return_mask=True,
+    save_mask = True,
 ) -> np.ndarray | None:
     """
     Generate tissue mask for an WSI
@@ -79,6 +80,10 @@ def gen_tissue_mask(
         wsi_path(str): path to WSI
         save_dir(str): directory to save the tissue mask in
         model_weight_path(str): path to the pre-trained model weights
+        threshold(float): binary mask threshold (range between 0.0-1.0), default=0.5
+        cuda(bool): Whether to use CUDA
+        return_mask(bool): Whether to return output mask
+        save_mask(bool): Whether to save output mask
     Returns:
         mask(np.ndarray): returns tissue mask if return_mask is True
     """
@@ -113,8 +118,9 @@ def gen_tissue_mask(
     mask = morpholoy_post_process(mask)
     mask = mask.astype(int)
     save_path = os.path.join(save_dir, f"{fn}.npy")
-    np.save(save_path, mask)
-    pprint(f"mask saved at: {save_path}")
-
+    if save_mask:
+        np.save(save_path, mask)
+        pprint(f"mask saved at: {save_path}")
+    pprint("Task finished successfully")
     if return_mask:
         return mask

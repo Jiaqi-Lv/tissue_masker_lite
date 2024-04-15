@@ -15,14 +15,16 @@ from tissue_masker_lite.process.process_wsi import gen_tissue_mask
 )
 @click.option("--threshold", type=float, default=0.5)
 @click.option("--cuda/--no-cuda", default=True)
-@click.option("--return_mask/--no-return_mask", default=False)
+@click.option("--return_mask/--no-return_mask", default=True)
+@click.option("--save_mask/--no-save_mask", default=True)
 def _get_mask(
     wsi_path: str,
     save_dir: str,
     model_weight: str,
-    threshold: str,
+    threshold: float,
     cuda: bool,
     return_mask: bool,
+    save_mask: bool,
 ):
     """
     Generate tissue mask of the input WSI
@@ -33,7 +35,8 @@ def _get_mask(
         model_weight(str): path to the pre-trained model weight
         threshold(float): binary mask threshold (range between 0.0-1.0), default=0.5
         cuda(bool): Whether to use CUDA
-        return_mask(bool): Whether to return output mask
+        return_mask(bool): Whether to return the output mask
+        save_mask(bool): Whether to save the output mask
     Returns:
         mask(np.ndarray): returns tissue mask if return_mask is True
     """
@@ -44,6 +47,7 @@ def _get_mask(
         threshold=threshold,
         cuda=cuda,
         return_mask=return_mask,
+        save_mask=save_mask
     )
 
 
@@ -51,9 +55,10 @@ def get_mask(
     wsi_path: str,
     save_dir: str,
     model_weight: str,
-    threshold: str,
-    cuda: bool,
-    return_mask: bool,
+    threshold: float = 0.5,
+    cuda: bool = True,
+    return_mask: bool = True,
+    save_mask: bool = True
 ) -> np.ndarray:
     """
     Generate tissue mask of the input WSI
@@ -65,6 +70,7 @@ def get_mask(
         threshold(float): binary mask threshold (range between 0.0-1.0), default=0.5
         cuda(bool): Whether to use CUDA
         return_mask(bool): Whether to return output mask
+        save_mask(bool): Whether to save output mask
     Returns:
         mask(np.ndarray): returns tissue mask if return_mask is True
     """
@@ -81,6 +87,7 @@ def get_mask(
         model_weight_path=model_weight,
         threshold=threshold,
         return_mask=return_mask,
+        save_mask=save_mask
     )
 
 

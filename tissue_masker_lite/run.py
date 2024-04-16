@@ -69,9 +69,9 @@ def get_mask(
         save_dir(str): directory to save the output mask
         model_weight(str): path to the pre-trained model weight
         threshold(float): binary mask threshold (range between 0.0-1.0), default=0.5
-        cuda(bool): Whether to use CUDA
-        return_mask(bool): Whether to return output mask
-        save_mask(bool): Whether to save output mask
+        cuda(bool): Whether to use CUDA, default=True
+        return_mask(bool): Whether to return output mask, default=True
+        save_mask(bool): Whether to save output mask, default=True
     Returns:
         mask(np.ndarray): returns tissue mask if return_mask is True
     """
@@ -83,6 +83,7 @@ def get_mask(
         save_dir=save_dir,
         model_weight_path=model_weight,
         threshold=threshold,
+        on_gpu=cuda,
         return_mask=return_mask,
         save_mask=save_mask,
     )

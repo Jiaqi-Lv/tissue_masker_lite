@@ -1,12 +1,13 @@
-import torch.nn as nn
+from typing import List, Optional, Union
+
 import torch
-from typing import Optional, Union, List
+import torch.nn as nn
 from model.decoder import UnetDecoder
-from model.heads import SegmentationHead, ClassificationHead
+from model.heads import ClassificationHead, SegmentationHead
+
 
 def initialize_decoder(module):
     for m in module.modules():
-
         if isinstance(m, nn.Conv2d):
             nn.init.kaiming_uniform_(m.weight, mode="fan_in", nonlinearity="relu")
             if m.bias is not None:
@@ -30,7 +31,6 @@ def initialize_head(module):
                 nn.init.constant_(m.bias, 0)
 
 
-
 class SegmentationModel(torch.nn.Module):
     def initialize(self):
         initialize_decoder(self.decoder)
@@ -39,12 +39,19 @@ class SegmentationModel(torch.nn.Module):
             initialize_head(self.classification_head)
 
     def check_input_shape(self, x):
-
         h, w = x.shape[-2:]
         output_stride = self.encoder.output_stride
         if h % output_stride != 0 or w % output_stride != 0:
-            new_h = (h // output_stride + 1) * output_stride if h % output_stride != 0 else h
-            new_w = (w // output_stride + 1) * output_stride if w % output_stride != 0 else w
+            new_h = (
+                (h // output_stride + 1) * output_stride
+                if h % output_stride != 0
+                else h
+            )
+            new_w = (
+                (w // output_stride + 1) * output_stride
+                if w % output_stride != 0
+                else w
+            )
             raise RuntimeError(
                 f"Wrong input shape height={h}, width={w}. Expected image height and width "
                 f"divisible by {output_stride}. Consider pad your images to shape ({new_h}, {new_w})."
@@ -168,7 +175,9 @@ class Unet(SegmentationModel):
         )
 
         if aux_params is not None:
-            self.classification_head = ClassificationHead(in_channels=self.encoder.out_channels[-1], **aux_params)
+            self.classification_head = ClassificationHead(
+                in_channels=self.encoder.out_channels[-1], **aux_params
+            )
         else:
             self.classification_head = None
 

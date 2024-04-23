@@ -1,6 +1,14 @@
 # tissue_masker_lite
 This repository contains a deep learning based approach to creating tissue masks from whole-slide images.
 
+## Highlights
+* Light weight model, fast process speed
+* Mask excludes slide artifacts including air bubbles and pen markings
+
+## Dependencies
+* [TIAToolBox](https://github.com/TissueImageAnalytics/tiatoolbox)  
+* [segmentation_models_pytorch](https://github.com/qubvel/segmentation_models.pytorch)
+
 # How to use
 ## 1. Install it as a Python Package locally
 Run `pip install .`  

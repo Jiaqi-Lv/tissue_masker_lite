@@ -1,5 +1,6 @@
 import numpy as np
-from skimage.morphology import binary_closing, remove_small_holes, remove_small_objects
+from skimage.morphology import (binary_closing, remove_small_holes,
+                                remove_small_objects)
 
 
 def morpholoy_post_process(patch: np.ndarray) -> np.ndarray:

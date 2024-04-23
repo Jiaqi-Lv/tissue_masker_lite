@@ -15,7 +15,7 @@ from tissue_masker_lite.process.process_wsi import gen_tissue_mask
     default="model_weights/model_36.pth",
 )
 @click.option("--threshold", type=float, default=0.5)
-@click.option("--cuda/--no-cuda", default=True)
+@click.option("--device", type=str, default="cuda")
 @click.option("--return_mask/--no-return_mask", default=True)
 @click.option("--save_mask/--no-save_mask", default=True)
 def _get_mask(
@@ -23,7 +23,7 @@ def _get_mask(
     save_dir: str,
     model_weight: str,
     threshold: float,
-    cuda: bool,
+    device: str,
     return_mask: bool,
     save_mask: bool,
 ):
@@ -35,7 +35,7 @@ def _get_mask(
         save_dir(str): directory to save the output mask
         model_weight(str): path to the pre-trained model weight
         threshold(float): binary mask threshold (range between 0.0-1.0), default=0.5
-        cuda(bool): Whether to use CUDA
+        device(str): device to run the model on, options are "cuda", "mps", "cpu"
         return_mask(bool): Whether to return the output mask
         save_mask(bool): Whether to save the output mask
     Returns:
@@ -46,7 +46,7 @@ def _get_mask(
         save_dir=save_dir,
         model_weight_path=model_weight,
         threshold=threshold,
-        cuda=cuda,
+        device=device,
         return_mask=return_mask,
         save_mask=save_mask,
     )
@@ -57,7 +57,7 @@ def get_mask(
     save_dir: str,
     model_weight: str,
     threshold: float = 0.5,
-    cuda: bool = True,
+    device: str = "cuda",
     return_mask: bool = True,
     save_mask: bool = True,
 ) -> np.ndarray:
@@ -69,7 +69,7 @@ def get_mask(
         save_dir(str): directory to save the output mask
         model_weight(str): path to the pre-trained model weight
         threshold(float): binary mask threshold (range between 0.0-1.0), default=0.5
-        cuda(bool): Whether to use CUDA, default=True
+        device(str): device to run the model on, options are "cuda", "mps", "cpu"
         return_mask(bool): Whether to return output mask, default=True
         save_mask(bool): Whether to save output mask, default=True
     Returns:
@@ -83,7 +83,7 @@ def get_mask(
         save_dir=save_dir,
         model_weight_path=model_weight,
         threshold=threshold,
-        on_gpu=cuda,
+        device=device,
         return_mask=return_mask,
         save_mask=save_mask,
     )

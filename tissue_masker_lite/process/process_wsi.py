@@ -123,7 +123,7 @@ def gen_tissue_mask(
 
     mask = np.where(mask > threshold, 1, 0)
     mask = morpholoy_post_process(mask)
-    mask = mask.astype(int)
+    mask = mask.astype(np.uint8)
     save_path = os.path.join(save_dir, f"{fn}.npy")
     if save_mask:
         np.save(save_path, mask)

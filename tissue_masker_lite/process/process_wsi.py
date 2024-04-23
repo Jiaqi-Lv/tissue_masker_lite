@@ -10,8 +10,7 @@ from tiatoolbox.tools.patchextraction import get_patch_extractor
 from tiatoolbox.wsicore.wsireader import WSIReader
 from tqdm.auto import tqdm
 
-from tissue_masker_lite.utils.helpers import (imagenet_normalise,
-                                              morpholoy_post_process)
+from tissue_masker_lite.utils.helpers import imagenet_normalise, morpholoy_post_process
 
 warnings.filterwarnings("ignore")
 
@@ -52,6 +51,8 @@ def pred_wsi(
         input_patch = torch.unsqueeze(input_patch, 0)
         if on_gpu:
             input_patch = input_patch.to("cuda").float()
+        else:
+            input_patch = input_patch.to("cpu").float()
 
         with torch.no_grad():
             pred = model(input_patch)
@@ -99,12 +100,16 @@ def gen_tissue_mask(
         in_channels=3,
         classes=1,
     )
-    model.load_state_dict(torch.load(model_weight_path))
-    model.eval()
+
     if on_gpu:
+        model.load_state_dict(torch.load(model_weight_path))
         model.to("cuda")
     else:
+        model.load_state_dict(
+            torch.load(model_weight_path, map_location=torch.device("cpu"))
+        )
         model.to("cpu")
+    model.eval()
 
     reader = WSIReader.open(wsi_path)
 

@@ -4,7 +4,7 @@ This repository contains a deep learning based approach to creating tissue masks
 ## Highlights
 * Light weight model, fast process speed
 * Mask excludes slide artifacts including air bubbles and pen markings
-* Support hardware acceleration on Apple Silicon Processors
+* Support hardware acceleration on Apple Silicon Processors (by setting device='mps')
 
 ## Dependencies
 * [TIAToolBox](https://github.com/TissueImageAnalytics/tiatoolbox)  

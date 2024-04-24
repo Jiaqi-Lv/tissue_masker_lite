@@ -35,7 +35,7 @@ def pred_wsi(
         input_img=reader,
         method_name="slidingwindow",
         patch_size=(512, 512),
-        stride=(128, 128),
+        stride=(480, 480),
         resolution=1.25,
         units="power",
     )

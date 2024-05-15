@@ -5,7 +5,9 @@ import numpy as np
 
 from tissue_masker_lite.process.process_wsi import gen_tissue_mask
 
-DEFAULT_MODEL_PATH = os.path.join(os.path.dirname(__file__), "model_weights/model_22.pth")
+DEFAULT_MODEL_PATH = os.path.join(
+    os.path.dirname(__file__), "model_weights/model_22.pth"
+)
 
 
 @click.command()

@@ -5,6 +5,8 @@ import numpy as np
 
 from tissue_masker_lite.process.process_wsi import gen_tissue_mask
 
+DEFAULT_MODEL_PATH = os.path.join(os.path.dirname(__file__), "model_weights/model_22.pth")
+
 
 @click.command()
 @click.option("--wsi_path", type=click.Path(path_type=str))
@@ -55,7 +57,7 @@ def _get_mask(
 def get_mask(
     wsi_path: str,
     save_dir: str,
-    model_weight: str,
+    model_weight: str = DEFAULT_MODEL_PATH,
     threshold: float = 0.5,
     device: str = "cuda",
     return_mask: bool = True,

@@ -6,7 +6,7 @@ import numpy as np
 from tissue_masker_lite.process.process_wsi import gen_tissue_mask
 
 DEFAULT_MODEL_PATH = os.path.join(
-    os.path.dirname(__file__), "model_weights/model_22.pth"
+    os.path.dirname(__file__), "model_weights/model_36.pth"
 )
 
 
@@ -18,7 +18,7 @@ DEFAULT_MODEL_PATH = os.path.join(
     type=click.Path(path_type=str),
     default="model_weights/model_36.pth",
 )
-@click.option("--threshold", type=float, default=0.5)
+@click.option("--threshold", type=float, default=0.8)
 @click.option("--device", type=str, default="cuda")
 @click.option("--return_mask/--no-return_mask", default=True)
 @click.option("--save_mask/--no-save_mask", default=True)
@@ -60,7 +60,7 @@ def get_mask(
     wsi_path: str,
     save_dir: str,
     model_weight: str = DEFAULT_MODEL_PATH,
-    threshold: float = 0.5,
+    threshold: float = 0.8,
     device: str = "cuda",
     return_mask: bool = True,
     save_mask: bool = True,

@@ -18,12 +18,10 @@ Run `pip install .`
 from tissue_masker_lite import get_mask
 wsi_path = "path/to/wsi"
 save_dir = "path/to/save_dir"
-model_weight_path = "tissue_masker_lite/model_weights/model_22.pth"
 mask = get_mask(
     wsi_path=input_wsi,
     save_dir=save_dir,
-    model_weight=model_weight_path,
-    threshold=0.5,
+    threshold=0.8,
     device="cuda",
     return_mask=True,
     save_mask=False,
@@ -35,8 +33,8 @@ See `tiatoolbox_demo.ipynb` for demo.
 # I/O details
 Supported input file formats:  
 Any Whole-Slide Image formats supported by [TIAToolBox](https://github.com/TissueImageAnalytics/tiatoolbox)  
-Output mask format:  
-`Numpy array of shape (H, W, 1), dtype=numpy.uint8, magnification = 1.25`
+Output binary mask format:  
+`Numpy array of shape (H, W), dtype=numpy.uint8, magnification = 1.25`
 
 # Examples
 ![example 1](images/example1.png)

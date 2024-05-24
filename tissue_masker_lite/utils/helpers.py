@@ -1,14 +1,16 @@
+import cv2
 import numpy as np
-from skimage.morphology import (binary_closing, remove_small_holes,
-                                remove_small_objects)
 
 
 def morpholoy_post_process(patch: np.ndarray) -> np.ndarray:
     """Performs a sequence of morphogical operations on input image"""
-    patch = remove_small_holes(patch, area_threshold=128)
-    patch = remove_small_objects(patch, min_size=256)
-    patch = binary_closing(patch)
-    return patch
+    kernel_diameter = 72
+    kernel = cv2.getStructuringElement(
+        cv2.MORPH_ELLIPSE, (kernel_diameter, kernel_diameter)
+    )
+    closing = cv2.morphologyEx(patch, cv2.MORPH_CLOSE, kernel)
+    opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN, kernel)
+    return opening
 
 
 def imagenet_normalise(img: np.ndarray) -> np.ndarray:

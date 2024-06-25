@@ -6,6 +6,7 @@ import numpy as np
 import segmentation_models_pytorch as smp
 import torch
 from tiatoolbox.models.engine.semantic_segmentor import SemanticSegmentor
+from tiatoolbox.models.architecture.unet import UNetModel
 from tiatoolbox.tools.patchextraction import get_patch_extractor
 from tiatoolbox.wsicore.wsireader import WSIReader
 from tqdm.auto import tqdm
@@ -98,11 +99,17 @@ def gen_tissue_mask(
     pprint(f"Processing {fn}")
     fn = os.path.splitext(fn)[0]
 
-    model = smp.Unet(
-        encoder_name="efficientnet-b0",
-        encoder_weights=None,
-        in_channels=3,
-        classes=1,
+    # model = smp.Unet(
+    #     encoder_name="efficientnet-b0",
+    #     encoder_weights=None,
+    #     in_channels=3,
+    #     classes=1,
+    # )
+
+    model = UNetModel(
+        num_input_channels=3,
+        num_output_channels=2,
+        encoder="unet",  # TODO: change to efficientnet-b0
     )
 
     pprint(f"Loading model to {device}")

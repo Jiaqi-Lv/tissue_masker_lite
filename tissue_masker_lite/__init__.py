@@ -1,1 +1,1 @@
-from .run import get_mask
+from tissue_masker_lite.run import get_mask

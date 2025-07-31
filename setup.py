@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="tissue_masker_lite",
@@ -8,7 +8,7 @@ setup(
     author="Jiaqi Lv",
     author_email="jiaqi.lv@warwick.ac.uk",
     license="BSD 3-Clause License",
-    packages=["tissue_masker_lite"],
-    install_requires=["tiatoolbox", "segmentation-models-pytorch"],
+    packages=find_packages(),
+    # install_requires=["tiatoolbox", "segmentation-models-pytorch"],
     zip_safe=False,
 )

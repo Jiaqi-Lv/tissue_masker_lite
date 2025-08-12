@@ -5,19 +5,16 @@ import numpy as np
 
 from tissue_masker_lite.process.process_wsi import gen_tissue_mask
 
-DEFAULT_MODEL_PATH = os.path.join(
-    os.path.dirname(__file__), "model_weights/model_36.pth"
-)
+DEFAULT_MODEL_PATH = [
+    os.path.join(os.path.dirname(__file__), "model_weights/model_22.pth"),
+    os.path.join(os.path.dirname(__file__), "model_weights/model_36.pth"),
+    os.path.join(os.path.dirname(__file__), "model_weights/model_54.pth"),
+]
 
 
 @click.command()
 @click.option("--wsi_path", type=click.Path(path_type=str))
 @click.option("--save_dir", type=click.Path(path_type=str), default="./output")
-@click.option(
-    "--model_weight",
-    type=click.Path(path_type=str),
-    default="model_weights/model_36.pth",
-)
 @click.option("--threshold", type=float, default=0.8)
 @click.option("--device", type=str, default="cuda")
 @click.option("--return_mask/--no-return_mask", default=True)
@@ -25,7 +22,6 @@ DEFAULT_MODEL_PATH = os.path.join(
 def _get_mask(
     wsi_path: str,
     save_dir: str,
-    model_weight: str,
     threshold: float,
     device: str,
     return_mask: bool,
@@ -48,7 +44,6 @@ def _get_mask(
     return get_mask(
         wsi_path=wsi_path,
         save_dir=save_dir,
-        model_weight_path=model_weight,
         threshold=threshold,
         device=device,
         return_mask=return_mask,
@@ -59,7 +54,6 @@ def _get_mask(
 def get_mask(
     wsi_path: str,
     save_dir: str,
-    model_weight: str = DEFAULT_MODEL_PATH,
     threshold: float = 0.8,
     device: str = "cuda",
     return_mask: bool = True,
@@ -71,7 +65,7 @@ def get_mask(
     Args:
         wsi_path(str): path to the input WSI
         save_dir(str): directory to save the output mask
-        model_weight(str): path to the pre-trained model weight
+        model_weight(list[str]): paths to the pre-trained model weights
         threshold(float): binary mask threshold (range between 0.0-1.0), default=0.5
         device(str): device to run the model on, options are "cuda", "mps", "cpu"
         return_mask(bool): Whether to return output mask, default=True
@@ -85,7 +79,7 @@ def get_mask(
     return gen_tissue_mask(
         wsi_path=wsi_path,
         save_dir=save_dir,
-        model_weight_path=model_weight,
+        model_weight_path=DEFAULT_MODEL_PATH,
         threshold=threshold,
         device=device,
         return_mask=return_mask,

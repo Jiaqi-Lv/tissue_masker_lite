@@ -1,11 +1,11 @@
 import os
-from tqdm import tqdm
-import numpy as np
 import pickle
-from tiatoolbox.wsicore.wsireader import WSIReader
-from tiatoolbox.utils.misc import imwrite
-import cv2
 
+import cv2
+import numpy as np
+from tiatoolbox.utils.misc import imwrite
+from tiatoolbox.wsicore.wsireader import WSIReader
+from tqdm import tqdm
 
 wsi_dir = "/home/u1910100/web-public/tcga"
 masks_dir = "/home/u1910100/lab-share/jiaqi/tcga_masks_qc"
@@ -13,7 +13,7 @@ save_dir = "/home/u1910100/lab-share/jiaqi/tcga_masks_qc"
 
 for mask in tqdm(os.listdir(masks_dir)):
     ext = os.path.splitext(mask)[1]
-    if ext != '.npy':
+    if ext != ".npy":
         continue
 
     mask_path = os.path.join(masks_dir, mask)

@@ -10,14 +10,13 @@ from tiatoolbox.tools.patchextraction import get_patch_extractor
 from tiatoolbox.wsicore.wsireader import WSIReader
 from tqdm.auto import tqdm
 
-from tissue_masker_lite.utils.helpers import (imagenet_normalise,
-                                              morpholoy_post_process)
+from tissue_masker_lite.utils.helpers import imagenet_normalise, morpholoy_post_process
 
 warnings.filterwarnings("ignore")
 
 
 def pred_wsi(
-    wsi_path: str, model: torch.nn.Module, device: str = "cuda"
+    wsi_path: str, models: list[torch.nn.Module], device: str = "cuda"
 ) -> tuple[list[np.ndarray], list[np.ndarray]]:
     """Predict an WSI
 
@@ -58,10 +57,13 @@ def pred_wsi(
             input_patch = input_patch.to(torch_device).float()
 
         with torch.no_grad():
-            pred = model(input_patch)
-            pred = torch.nn.functional.sigmoid(pred)
-            pred = pred.detach().cpu().numpy()
-            pred_mask = pred[0]
+            preds = []
+            for model in models:
+                pred = model(input_patch)
+                pred = torch.nn.functional.sigmoid(pred)
+                pred = pred.detach().cpu().numpy()
+                preds.append(pred[0])
+            pred_mask = np.mean(preds, axis=0)
 
         pred_mask = np.squeeze(pred_mask, 0)
 
@@ -73,7 +75,7 @@ def pred_wsi(
 def gen_tissue_mask(
     wsi_path: str,
     save_dir: str,
-    model_weight_path: str = "model_weights/model_36.pth",
+    model_weight_path: list[str],
     threshold: float = 0.5,
     device: str = "cuda",
     return_mask=True,
@@ -85,7 +87,7 @@ def gen_tissue_mask(
     Args:
         wsi_path(str): path to WSI
         save_dir(str): directory to save the tissue mask in
-        model_weight_path(str): path to the pre-trained model weights
+        model_weight_path(list[str]): paths to the pre-trained model weights
         threshold(float): binary mask threshold (range between 0.0-1.0), default=0.5
         cuda(bool): Whether to use CUDA
         device(str): device to run the model on, options are "cuda", "mps", "cpu"
@@ -107,15 +109,25 @@ def gen_tissue_mask(
 
     pprint(f"Loading model to {device}")
     torch_device = torch.device(device)
-    model.load_state_dict(torch.load(model_weight_path, map_location=torch_device))
-    model.to(torch_device)
-    model.eval()
+
+    models = []
+    for model_path in model_weight_path:
+        model = smp.Unet(
+            encoder_name="efficientnet-b0",
+            encoder_weights=None,
+            in_channels=3,
+            classes=1,
+        )
+        model.load_state_dict(torch.load(model_path, map_location=torch_device))
+        model.to(torch_device)
+        model.eval()
+        models.append(model)
 
     reader = WSIReader.open(wsi_path)
 
     dimension = reader.slide_dimensions(resolution=1.25, units="power")
 
-    predictions, coordinates = pred_wsi(wsi_path, model, device=device)
+    predictions, coordinates = pred_wsi(wsi_path, models, device=device)
 
     mask = SemanticSegmentor.merge_prediction(
         (dimension[1], dimension[0]), predictions, coordinates

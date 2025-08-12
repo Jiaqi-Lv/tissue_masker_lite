@@ -11,4 +11,6 @@ setup(
     packages=find_packages(),
     # install_requires=["tiatoolbox", "segmentation-models-pytorch"],
     zip_safe=False,
+    include_package_data=True,          
+    package_data={"tissue_masker_lite": ["model_weights/*.pth"]},
 )
